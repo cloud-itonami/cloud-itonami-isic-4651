@@ -1,0 +1,11 @@
+{:itonami.blueprint/id "cloud-itonami-isic-4651"
+ :itonami.blueprint/name "Wholesale of computers, computer peripheral equipment and software"
+ :itonami.blueprint/isic-rev5 "4651"
+ :itonami.blueprint/domain :downstream/computer-hardware-software-wholesale
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:export-control-compliance :data-security :transparency]
+ :itonami.blueprint/governor :tech-export-governor
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :optimization]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/maturity :implemented}
