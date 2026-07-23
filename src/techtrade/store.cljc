@@ -41,10 +41,9 @@
   which order was dispatched, released, or invoiced, on what
   jurisdictional and classification basis, approved by whom -- always a
   query over an immutable log."
-  (:require #?(:clj  [clojure.edn :as edn]
-               :cljs [cljs.reader :as edn])
-            [techtrade.registry :as registry]
-            [langchain.db :as d]))
+  (:require [techtrade.registry :as registry]
+            [langchain.db :as d]
+            [langchain-store.core :as ls]))
 
 (defprotocol Store
   (tech-order [s id])
@@ -297,13 +296,10 @@
    :release-sequence/jurisdiction        {:db/unique :db.unique/identity}
    :invoice-sequence/jurisdiction        {:db/unique :db.unique/identity}})
 
-(defn- enc [v] (pr-str v))
-(defn- dec* [s] (when s (edn/read-string s)))
-
 ;; Every tech-order field is stored as its own Datomic attr so a governor
 ;; pull reads the exact ground truth (no blob decode). Boolean fields
 ;; are coerced on read so a missing attr reads back as false (parity
-;; with MemStore). Keyword-valued fields round-trip via `enc`/`dec*`
+;; with MemStore). Keyword-valued fields round-trip via `ls/enc`/`ls/dec*`
 ;; (stored as an EDN string) so `:item-type`/`:delivery-mode` survive
 ;; the pull as keywords, not bare strings. [field-key tx-attr kind]
 ;; kind ∈ #{:plain :bool :kw}
@@ -339,7 +335,7 @@
   (reduce (fn [tx [k attr kind]]
             (let [v (get to k)]
               (cond-> tx
-                (some? v) (assoc attr (if (= kind :kw) (enc v) v)))))
+                (some? v) (assoc attr (if (= kind :kw) (ls/enc v) v)))))
           {:tech-order/id (:id to)}
           tech-order-fields))
 
@@ -351,7 +347,7 @@
               (let [v (get m attr)]
                 (cond
                   (= kind :bool)  (assoc to k (boolean v))
-                  (= kind :kw)    (cond-> to (some? v) (assoc k (dec* v)))
+                  (= kind :kw)    (cond-> to (some? v) (assoc k (ls/dec* v)))
                   (some? v)       (assoc to k v)
                   :else           to)))
             {:id (:tech-order/id m)}
@@ -366,25 +362,25 @@
          (map #(pull->tech-order (d/pull (d/db conn) tech-order-pull [:tech-order/id %])))
          (sort-by :id)))
   (assessment-of [_ tech-order-id]
-    (dec* (d/q '[:find ?p . :in $ ?toid
+    (ls/dec* (d/q '[:find ?p . :in $ ?toid
                 :where [?a :assessment/tech-order-id ?toid] [?a :assessment/payload ?p]]
               (d/db conn) tech-order-id)))
   (ledger [_]
     (->> (d/q '[:find ?s ?f :where [?e :ledger/seq ?s] [?e :ledger/fact ?f]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (dispatch-history [_]
     (->> (d/q '[:find ?s ?r :where [?e :dispatch/seq ?s] [?e :dispatch/record ?r]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (release-history [_]
     (->> (d/q '[:find ?s ?r :where [?e :release/seq ?s] [?e :release/record ?r]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (invoice-history [_]
     (->> (d/q '[:find ?s ?r :where [?e :invoice/seq ?s] [?e :invoice/record ?r]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (next-dispatch-sequence [_ jurisdiction]
     (or (d/q '[:find ?n . :in $ ?j
               :where [?e :dispatch-sequence/jurisdiction ?j] [?e :dispatch-sequence/next ?n]]
@@ -412,7 +408,7 @@
       (d/transact! conn [(tech-order->tx value)])
 
       :classification-assessment/set
-      (d/transact! conn [{:assessment/tech-order-id (first path) :assessment/payload (enc payload)}])
+      (d/transact! conn [{:assessment/tech-order-id (first path) :assessment/payload (ls/enc payload)}])
 
       :order/mark-dispatched
       (let [tech-order-id (first path)
@@ -422,7 +418,7 @@
         (d/transact! conn
                      [(tech-order->tx (assoc tech-order-patch :id tech-order-id))
                       {:dispatch-sequence/jurisdiction jurisdiction :dispatch-sequence/next next-n}
-                      {:dispatch/seq (count (dispatch-history s)) :dispatch/record (enc (get result "record"))}])
+                      {:dispatch/seq (count (dispatch-history s)) :dispatch/record (ls/enc (get result "record"))}])
         result)
 
       :order/mark-released
@@ -433,7 +429,7 @@
         (d/transact! conn
                      [(tech-order->tx (assoc tech-order-patch :id tech-order-id))
                       {:release-sequence/jurisdiction jurisdiction :release-sequence/next next-n}
-                      {:release/seq (count (release-history s)) :release/record (enc (get result "record"))}])
+                      {:release/seq (count (release-history s)) :release/record (ls/enc (get result "record"))}])
         result)
 
       :order/mark-invoiced
@@ -444,12 +440,12 @@
         (d/transact! conn
                      [(tech-order->tx (assoc tech-order-patch :id tech-order-id))
                       {:invoice-sequence/jurisdiction jurisdiction :invoice-sequence/next next-n}
-                      {:invoice/seq (count (invoice-history s)) :invoice/record (enc (get result "record"))}])
+                      {:invoice/seq (count (invoice-history s)) :invoice/record (ls/enc (get result "record"))}])
         result)
       nil)
     s)
   (append-ledger! [s fact]
-    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (enc fact)}])
+    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (ls/enc fact)}])
     fact)
   (with-tech-orders [s tech-orders]
     (when (seq tech-orders) (d/transact! conn (mapv tech-order->tx (vals tech-orders)))) s))
