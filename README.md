@@ -87,7 +87,7 @@ layers enforce this (`techtrade.governor`'s `:delivery/dispatch`/
 `:technology/release`/`:invoice/settle` high-stakes gate and
 `techtrade.phase`'s phase table, which never puts any of the three ops
 in any phase's `:auto` set) -- see `techtrade.phase`'s docstring and
-`test/techtrade/phase_test.clj`'s
+`test/techtrade/phase_test.cljk`'s
 `delivery-dispatch-never-auto-at-any-phase`/
 `technology-release-never-auto-at-any-phase`/
 `invoice-settle-never-auto-at-any-phase`. The actor may draft, check and
@@ -200,14 +200,14 @@ generic robotics/identity/forms/dmn/bpmn/audit-ledger stack.
 
 | File | Role |
 |---|---|
-| `src/techtrade/store.cljc` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + dispatch AND release AND invoice history (triple history). The double-actuation guards check dedicated `:dispatched?`/`:released?`/`:invoiced?` booleans rather than a `:status` value |
-| `src/techtrade/registry.cljc` | Dispatch/release/invoice draft records (record construction only -- the Tech Export Governor's checks are direct entity booleans/values, so there are no pure range-check functions to host here) |
-| `src/techtrade/facts.cljc` | Per-jurisdiction export-control-CLASSIFICATION-LIST catalog (not merely 'has an export-control law') with an official spec-basis citation per entry, honest coverage reporting |
-| `src/techtrade/techtradeadvisor.cljc` | **TechTradeAdvisor** -- `mock-advisor` ‖ `llm-advisor`; intake/classification-verification/dispatch/release/invoice proposals |
-| `src/techtrade/governor.cljc` | **Tech Export Governor** -- 8 HARD checks (spec-basis · evidence-incomplete · credit-uncleared · contract-missing · eccn-classification-missing · license-required-unauthorized · counterparty-sanctions-flag-unresolved · denied-party-list-flag-unresolved) + 3 double-actuation guards + 1 soft (confidence/actuation gate) + `effective-destination` (the deemed-export-aware destination resolver) |
-| `src/techtrade/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (dispatch/release/invoice always human; order intake is the ONLY auto-eligible op) |
-| `src/techtrade/operation.cljc` | **OperationActor** -- langgraph StateGraph |
-| `src/techtrade/sim.cljc` | demo driver |
+| `src/techtrade/store.cljk` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + dispatch AND release AND invoice history (triple history). The double-actuation guards check dedicated `:dispatched?`/`:released?`/`:invoiced?` booleans rather than a `:status` value |
+| `src/techtrade/registry.cljk` | Dispatch/release/invoice draft records (record construction only -- the Tech Export Governor's checks are direct entity booleans/values, so there are no pure range-check functions to host here) |
+| `src/techtrade/facts.cljk` | Per-jurisdiction export-control-CLASSIFICATION-LIST catalog (not merely 'has an export-control law') with an official spec-basis citation per entry, honest coverage reporting |
+| `src/techtrade/techtradeadvisor.cljk` | **TechTradeAdvisor** -- `mock-advisor` ‖ `llm-advisor`; intake/classification-verification/dispatch/release/invoice proposals |
+| `src/techtrade/governor.cljk` | **Tech Export Governor** -- 8 HARD checks (spec-basis · evidence-incomplete · credit-uncleared · contract-missing · eccn-classification-missing · license-required-unauthorized · counterparty-sanctions-flag-unresolved · denied-party-list-flag-unresolved) + 3 double-actuation guards + 1 soft (confidence/actuation gate) + `effective-destination` (the deemed-export-aware destination resolver) |
+| `src/techtrade/phase.cljk` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (dispatch/release/invoice always human; order intake is the ONLY auto-eligible op) |
+| `src/techtrade/operation.cljk` | **OperationActor** -- langgraph StateGraph |
+| `src/techtrade/sim.cljk` | demo driver |
 | `test/techtrade/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)

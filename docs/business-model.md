@@ -85,7 +85,7 @@ the three `:social-impact` tags in `blueprint.edn` (`:export-control-
 compliance`, `:data-security`, `:transparency`).
 
 This is the rule the companion contract test
-(`test/techtrade/governor_contract_test.clj`) encodes end-to-end: the
+(`test/techtrade/governor_contract_test.cljk`) encodes end-to-end: the
 TechTradeAdvisor never dispatches hardware, releases technology, or
 settles an invoice the Tech Export Governor would reject, `:delivery/
 dispatch`/`:technology/release`/`:invoice/settle` NEVER auto-commit at
@@ -260,7 +260,7 @@ that distinguishes this vertical from a generic trading house.
 is therefore its OWN dedicated HARD check, off the dedicated
 `:denied-party-screened?` fact, evaluated UNCONDITIONALLY at all three
 actuation ops -- proven distinct from generic sanctions screening by
-`test/techtrade/governor_contract_test.clj`'s `denied-party-list-flag-
+`test/techtrade/governor_contract_test.cljk`'s `denied-party-list-flag-
 unresolved-is-a-genuinely-different-failure-mode-from-generic-
 sanctions` (to-8, which explicitly passes OFAC screening while failing
 denied-party screening).
@@ -290,7 +290,7 @@ nationality (`:release-recipient-nationality`), not the order's
 `:destination-country` -- so a deemed-export release cannot silently
 evade classification/license scrutiny by pointing at an unconcerning
 shipment destination while the real recipient is a foreign national
-elsewhere. `test/techtrade/governor_contract_test.clj`'s
+elsewhere. `test/techtrade/governor_contract_test.cljk`'s
 `deemed-export-license-check-reads-recipient-nationality-not-
 destination-country` (to-10) proves this end-to-end: the order's own
 `:destination-country` and its `:release-recipient-nationality` are
