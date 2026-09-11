@@ -1,5 +1,5 @@
 (ns techtrade.sim
-  "Demo driver -- `clojure -M:dev:run`. Walks a clean hardware order
+  "Demo driver -- `kbb -M:dev:run`. Walks a clean hardware order
   through intake -> classification verification -> physical dispatch
   (escalate/approve/commit) -> invoice settlement (escalate/approve/
   commit), a clean deemed-export software release through the SAME

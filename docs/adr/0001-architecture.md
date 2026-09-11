@@ -472,7 +472,7 @@ Two options were considered:
   `test/techtrade/store_contract_test.cljk`, including keyword-field
   round-trip parity (`:item-type`) not required by any prior sibling.
 - 46 tests / 265 assertions pass; lint is clean; the demo
-  (`clojure -M:dev:run`) walks one clean dispatch + invoice lifecycle,
+  (`kbb -M:dev:run`) walks one clean dispatch + invoice lifecycle,
   one clean deemed-export release + invoice lifecycle, nine HARD-hold
   scenarios (no spec-basis, credit-uncleared, contract-missing,
   eccn-classification-missing, license-required-unauthorized [DISTINCT

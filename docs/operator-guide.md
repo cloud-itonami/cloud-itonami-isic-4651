@@ -127,7 +127,7 @@ without an authorized license when one was required, sanctions or
 denied-party screening suppressed to force a dispatch/release through,
 or an invoice posted without a human sign-off.
 
-## Feel the Decision Gate: `clojure -M:dev:run`
+## Feel the Decision Gate: `kbb -M:dev:run`
 
 This vertical has no companion playable prototype. The fastest hands-on
 way to feel why the `:tech-export-governor` gate exists -- and why it
