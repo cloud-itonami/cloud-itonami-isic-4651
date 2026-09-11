@@ -30,7 +30,7 @@
   jurisdictions and rule names by string) rather than relying on map
   iteration order. Two consecutive runs are byte-identical.
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [jp-go-dds.skin]
             [kotoba.lang.text :as str]
@@ -602,7 +602,7 @@
    "</header>\n"
    "<main>\n"
    "  <p class=\"subtitle\">Generated at build time by <code>techtrade.render-html</code> "
-   "(<code>clojure -M:dev:render-html</code>) by running the real actor stack "
+   "(<code>kbb -M:dev:render-html</code>) by running the real actor stack "
    "&mdash; <code>techtrade.operation</code> (a <code>langgraph</code> StateGraph) &rarr; "
    "<code>techtrade.governor</code> &rarr; <code>techtrade.store</code>. Nothing on this page is "
    "hand-written sample data: every id, ECCN, rule, record number and count below was read back out of "
@@ -626,7 +626,7 @@
    "  <p>cloud-itonami &middot; TechTradeAdvisor &#8867; <code>:tech-export-governor</code> &middot; "
    "styled with <a href=\"https://github.com/kotoba-lang/jp-go-digital-design-system\">jp-go-dds</a> "
    "(&#12487;&#12472;&#12479;&#12523;&#24193;&#12487;&#12470;&#12452;&#12531;&#12471;&#12473;&#12486;&#12512;). "
-   "Regenerate with <code>clojure -M:dev:render-html</code>.</p>\n"
+   "Regenerate with <code>kbb -M:dev:render-html</code>.</p>\n"
    "</footer>\n"
    "</body></html>\n"))
 
