@@ -233,7 +233,7 @@ Three design options were considered:
   facts are NOT two evidentiary arms of the SAME determination (as
   chain-of-custody + smelter-certification are for conflict-minerals
   provenance), they are two SEQUENTIAL, dependent, and separately
-  actionable determinations. `test/techtrade/governor_contract_test.clj`'s
+  actionable determinations. `test/techtrade/governor_contract_test.cljk`'s
   `eccn-classification-missing-is-held-and-unoverridable` (to-5) and
   `license-required-unauthorized-is-a-genuinely-different-failure-mode-
   from-eccn-classification-missing` (to-6) each assert the OTHER rule
@@ -286,7 +286,7 @@ specialized tech wholesaler from a generic trading house.
 `denied-party-list-flag-unresolved-violations` is evaluated
 UNCONDITIONALLY at all three actuation ops, the SAME open-flag-
 unresolved discipline the generic sanctions check establishes, applied
-to a genuinely different fact. `test/techtrade/governor_contract_test.clj`'s
+to a genuinely different fact. `test/techtrade/governor_contract_test.cljk`'s
 `denied-party-list-flag-unresolved-is-a-genuinely-different-failure-
 mode-from-generic-sanctions` (to-8, which explicitly PASSES OFAC
 screening while failing denied-party screening) proves the split is
@@ -326,7 +326,7 @@ has three actuation ops (Decision 3) rather than two.
 `techtrade.store/Store` is implemented by both `MemStore` (atom-backed,
 default for dev/tests/demo) and `DatomicStore` (`langchain.db`-backed),
 proven to satisfy the same contract in
-`test/techtrade/store_contract_test.clj`. Unlike every prior sibling's
+`test/techtrade/store_contract_test.cljk`. Unlike every prior sibling's
 `DatomicStore`, this one also round-trips KEYWORD-valued fields
 (`:item-type`, `:delivery-mode`, `:status`) through an EDN-string
 encoding (`tech-order-fields`'s `:kw` kind) rather than storing them as
@@ -469,7 +469,7 @@ Two options were considered:
 - Establishes the fleet's first explicitly path-specific (rather than
   vertical-uniform) robotics-premise reasoning.
 - `MemStore` || `DatomicStore` parity is proven by
-  `test/techtrade/store_contract_test.clj`, including keyword-field
+  `test/techtrade/store_contract_test.cljk`, including keyword-field
   round-trip parity (`:item-type`) not required by any prior sibling.
 - 46 tests / 265 assertions pass; lint is clean; the demo
   (`clojure -M:dev:run`) walks one clean dispatch + invoice lifecycle,
