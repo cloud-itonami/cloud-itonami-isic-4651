@@ -1,5 +1,5 @@
 (ns techtrade.facts-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [techtrade.facts :as facts]))
 
 (deftest usa-has-a-spec-basis
