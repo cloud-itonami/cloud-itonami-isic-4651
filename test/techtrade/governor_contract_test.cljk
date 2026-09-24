@@ -22,7 +22,7 @@
   docstring claim -- `techtrade.governor/effective-destination` reads
   the release recipient's nationality, not the order's own
   `:destination-country`."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [langgraph.graph :as g]
             [techtrade.governor :as governor]
             [techtrade.store :as store]
